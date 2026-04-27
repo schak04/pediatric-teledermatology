@@ -7,14 +7,14 @@ A minimal web application for remote pediatric dermatology consultations.
 ## Tech Stack
 - **Backend:** Laravel
 - **Frontend:** React + Tailwind CSS (Vite)
-- **Database:** MongoDB
+- **Database:** MySQL
 
 ---
 
 ## System Overview
 ![Overview](./assets/overview.png)
 
-## Basic Data Flow
-![Flow](./assets/flow.png)
+## Medical Consultation Sequence Diagram
+![Sequence](./assets/sequence.png)
 
 ---
