@@ -1,5 +1,20 @@
-# Pediatric Dermatology
+# Pediatric Teledermatology Platform
 
-A web app for remote pediatric dermatology consultations, diagnosis, and treatment plans.
+A minimal web application for remote pediatric dermatology consultations.
+
+---
+
+## Tech Stack
+- **Backend:** Laravel
+- **Frontend:** React + Tailwind CSS (Vite)
+- **Database:** MongoDB
+
+---
+
+## System Overview
+![Overview](./assets/overview.png)
+
+## Basic Data Flow
+![Flow](./assets/flow.png)
 
 ---
