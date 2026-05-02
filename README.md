@@ -6,7 +6,7 @@ A minimal web application for remote pediatric dermatology consultations.
 
 ## Tech Stack
 - **Backend:** Laravel
-- **Frontend:** React + Tailwind CSS (Vite)
+- **Frontend:** Blade + Tailwind CSS
 - **Database:** MySQL
 
 ---
@@ -17,6 +17,9 @@ A minimal web application for remote pediatric dermatology consultations.
 ## Medical Consultation Sequence Diagram
 ![Sequence](./assets/sequence.png)
 
+> [!NOTE]  
+> This sequence diagram illustrates the core medical consultation workflow between Patient and Doctor. Admin actions are excluded from the diagram as they are not part of the primary consultation flow.
+
 ---
 
 ## Features Planned (MVP)
@@ -25,15 +28,15 @@ A minimal web application for remote pediatric dermatology consultations.
 
 - Patients/Parents:
     - Upload case images + descriptions (and other relevant info) for consultation.
-    - View status of their uploaded cases and the diagnosis and treatment plans uploaded by doctor.
+    - View status of their uploaded cases and the diagnosis and treatment plans provided by the doctor.
 
 - Doctors:
     - View all cases uploaded by patients (no assignment system for the MVP).
     - Add diagnosis and treatment plans to cases.
 
 - Admins:
-    - View all submitted cases.
-    - View status and details of cases.
-    - More privileges, like removing users, etc. (not decided yet; will finalise soon).
+    - View all users.
+    - Delete users.
+    - View all submitted cases (read-only).
 
 ---
