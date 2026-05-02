@@ -1,11 +1,11 @@
-# Pediatric Teledermatology Platform
+# TeleDermPeds
 
-A minimal web application for remote pediatric dermatology consultations.
+A web application for remote dermatology consultations for children.
 
 ---
 
 ## Tech Stack
-- **Backend:** Laravel
+- **Backend:** Laravel (MVC)
 - **Frontend:** Blade + Tailwind CSS
 - **Database:** MySQL
 
@@ -19,6 +19,9 @@ A minimal web application for remote pediatric dermatology consultations.
 
 > [!NOTE]  
 > This sequence diagram illustrates the core medical consultation workflow between Patient and Doctor. Admin actions are excluded from the diagram as they are not part of the primary consultation flow.
+
+## ER Diagram
+![ER](./assets/er.png)
 
 ---
 
