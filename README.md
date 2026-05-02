@@ -5,7 +5,7 @@ A web application for remote dermatology consultations for children.
 ---
 
 ## Tech Stack
-- **Backend:** Laravel (MVC)
+- **Backend:** Laravel
 - **Frontend:** Blade + Tailwind CSS
 - **Database:** MySQL
 
