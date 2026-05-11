@@ -43,3 +43,39 @@ A web application for remote dermatology consultations for children.
     - View all submitted cases (read-only).
 
 ---
+
+## Setup & Development
+
+> This section exists because this is a team project.
+
+### 1. Installation
+```bash
+composer install
+npm install
+```
+
+### 2. Database & Seeding
+Initialize the database with default accounts for testing:
+```bash
+php artisan migrate:fresh --seed
+```
+
+**Default Test Accounts:**
+- **Admin**: `admin@telederm.com` / `AdminPass123!`
+- **Doctor**: `doctor@telederm.com` / `DoctorPass123!`
+- **Patient**: `patient@telederm.com` / `PatientPass123!`
+
+### 3. File Storage
+Run this command to make uploaded medical images visible:
+```bash
+php artisan storage:link
+```
+
+### 4. Running the App
+Run both commands in separate terminals:
+```bash
+php artisan serve
+npm run dev
+```
+
+---
