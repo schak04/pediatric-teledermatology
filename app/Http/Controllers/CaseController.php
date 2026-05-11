@@ -53,4 +53,25 @@ class CaseController extends Controller
 
         return view('cases.show', compact('case'));
     }
+
+    public function updateDiagnosis(Request $request, DermatologyCase $case)
+    {
+        if (auth()->user()->role !== 'doctor') {
+            abort(403);
+        }
+
+        $request->validate([
+            'diagnosis' => 'required|string|min:5',
+            'treatment' => 'required|string|min:5',
+        ]);
+
+        $case->update([
+            'doctor_id' => auth()->id(),
+            'diagnosis' => $request->diagnosis,
+            'treatment' => $request->treatment,
+            'status' => 'diagnosed',
+        ]);
+
+        return redirect()->route('cases.show', $case)->with('success', 'Diagnosis updated successfully!');
+    }
 }
