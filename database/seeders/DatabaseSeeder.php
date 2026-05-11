@@ -17,9 +17,28 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // Create Admin
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'System Admin',
+            'email' => 'admin@telederm.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('AdminPass123!'),
+            'role' => 'admin',
+        ]);
+
+        // Create Doctor
+        User::factory()->create([
+            'name' => 'Dr. Smith',
+            'email' => 'doctor@telederm.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('DoctorPass123!'),
+            'role' => 'doctor',
+        ]);
+
+        // Create Patient
+        User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'patient@telederm.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('PatientPass123!'),
+            'role' => 'patient',
         ]);
     }
 }
