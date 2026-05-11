@@ -14,11 +14,14 @@ class CaseController extends Controller
         
         if ($user->role === 'patient') {
             $cases = DermatologyCase::where('user_id', $user->id)->latest()->get();
-        } else {
-            $cases = DermatologyCase::with('user')->latest()->get();
-        }
+            return view('cases.index', compact('cases'));
+        } 
+        
+        // Doctor view: Separate pending and diagnosed
+        $pendingCases = DermatologyCase::with('user')->where('status', 'pending')->latest()->get();
+        $diagnosedCases = DermatologyCase::with('user')->where('status', 'diagnosed')->latest()->get();
 
-        return view('cases.index', compact('cases'));
+        return view('cases.index', compact('pendingCases', 'diagnosedCases'));
     }
 
     public function create()
