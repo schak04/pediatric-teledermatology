@@ -3,9 +3,11 @@
 @section('content')
 <div class="py-12 px-4">
     <div class="max-w-4xl mx-auto">
-        <div class="mb-8">
-            <a href="{{ route('cases.index') }}" class="text-sm font-medium text-blue-600 hover:underline">&larr; Back to Cases</a>
-        </div>
+        @include('partials.breadcrumbs', ['items' => [
+            ['label' => 'Dashboard', 'url' => route('dashboard')],
+            ['label' => auth()->user()->role === 'patient' ? 'My Cases' : 'All Cases', 'url' => route('cases.index')],
+            ['label' => 'Case #' . $case->id],
+        ]])
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Case Image -->

@@ -11,7 +11,18 @@
                 </p>
 
                 <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @if(auth()->user()->role === 'patient')
+                    @if(auth()->user()->role === 'admin')
+                        <div class="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h2 class="font-bold text-lg mb-2">User Management</h2>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">View and manage all registered users.</p>
+                            <a href="{{ route('admin.users.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">Manage Users</a>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h2 class="font-bold text-lg mb-2">Case Monitoring</h2>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Read-only overview of all consultations.</p>
+                            <a href="{{ route('admin.cases.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">View Cases</a>
+                        </div>
+                    @elseif(auth()->user()->role === 'patient')
                         <div class="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
                             <h2 class="font-bold text-lg mb-2">My Cases</h2>
                             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">View your consultation history and status.</p>

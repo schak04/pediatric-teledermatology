@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto py-12 px-4">
+    @include('partials.breadcrumbs', ['items' => [
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ['label' => 'My Cases', 'url' => route('cases.index')],
+        ['label' => 'New Consultation'],
+    ]])
+
     <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">New Consultation</h1>
         <p class="text-slate-600 dark:text-slate-400 mb-8">Please provide a clear image of the skin condition and a brief description.</p>
