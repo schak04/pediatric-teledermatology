@@ -3,6 +3,11 @@
 @section('content')
 <div class="py-12 px-4">
     <div class="max-w-7xl mx-auto">
+        @include('partials.breadcrumbs', ['items' => [
+            ['label' => 'Dashboard', 'url' => route('dashboard')],
+            ['label' => auth()->user()->role === 'patient' ? 'My Cases' : 'All Cases'],
+        ]])
+
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
                 @if(auth()->user()->role === 'patient') My Consultation History @else Clinical Dashboard @endif

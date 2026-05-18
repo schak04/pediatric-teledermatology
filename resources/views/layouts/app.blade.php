@@ -11,6 +11,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('theme')
+                    || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                if (t === 'dark') document.documentElement.classList.add('dark');
+            } catch (e) {}
+        })();
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
@@ -26,11 +36,15 @@
                         </a>
                     </div>
                     
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2 md:gap-6">
                         <div class="hidden md:flex items-center gap-4 text-sm font-medium">
                             <a href="{{ url('/') }}" class="hover:text-blue-600 transition-colors">Home</a>
                             @auth
                                 <a href="{{ url('/dashboard') }}" class="hover:text-blue-600 transition-colors">Dashboard</a>
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="{{ route('admin.users.index') }}" class="hover:text-blue-600 transition-colors">Users</a>
+                                    <a href="{{ route('admin.cases.index') }}" class="hover:text-blue-600 transition-colors">Cases</a>
+                                @endif
                                 <form method="POST" action="{{ route('logout') }}" class="inline">
                                     @csrf
                                     <button type="submit" class="hover:text-blue-600 transition-colors">Logout</button>
@@ -41,7 +55,7 @@
                             @endauth
                         </div>
 
-                        <button 
+                        <button
                             onclick="toggleTheme()"
                             class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                             aria-label="Toggle Theme"
@@ -49,6 +63,35 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                         </button>
+
+                        <button
+                            type="button"
+                            onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+                            class="md:hidden p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            aria-label="Toggle Menu"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-slate-200 dark:border-slate-800 pt-3">
+                    <div class="flex flex-col gap-2 text-sm font-medium">
+                        <a href="{{ url('/') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('admin.users.index') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Users</a>
+                                <a href="{{ route('admin.cases.index') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cases</a>
+                            @endif
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Logout</button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Login</a>
+                            <a href="{{ route('register') }}" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors">Get Started</a>
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -56,6 +99,7 @@
 
         <!-- main content -->
         <main class="flex-grow max-w-7xl mx-auto w-full py-6 px-4 sm:px-6 lg:px-8">
+            @include('partials.flash')
             @yield('content')
         </main>
 

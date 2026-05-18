@@ -4,12 +4,6 @@
 <div class="max-w-md mx-auto py-12 px-4">
     <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white text-center mb-8">Welcome Back</h1>
-        
-        @if(session('error'))
-            <div class="mb-4 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-sm">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <form method="POST" action="{{ route('login.post') }}" class="space-y-6">
             @csrf
