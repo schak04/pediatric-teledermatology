@@ -1,80 +1,116 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 px-4">
-    <div class="max-w-7xl mx-auto">
-        @include('partials.breadcrumbs', ['items' => [
-            ['label' => 'Dashboard', 'url' => route('dashboard')],
-            ['label' => 'Case Monitoring'],
-        ]])
-
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Global Case Monitoring</h1>
-            <span class="text-xs uppercase tracking-widest text-slate-500 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">Read-only</span>
+<div class="page">
+    <div class="page__head">
+        <div>
+            <h1 class="page__title">All cases</h1>
+            <p class="page__sub">Read-only view of every consultation submitted to the platform.</p>
         </div>
-
-        <div class="flex flex-wrap gap-2 mb-6 text-sm">
-            <a href="{{ route('admin.cases.index') }}"
-               class="px-3 py-1.5 rounded-full border transition-colors {{ ! $status ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-500' }}">
-                All <span class="ml-1 opacity-75">({{ $counts['all'] }})</span>
-            </a>
-            <a href="{{ route('admin.cases.index', ['status' => 'pending']) }}"
-               class="px-3 py-1.5 rounded-full border transition-colors {{ $status === 'pending' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-amber-500' }}">
-                Pending <span class="ml-1 opacity-75">({{ $counts['pending'] }})</span>
-            </a>
-            <a href="{{ route('admin.cases.index', ['status' => 'diagnosed']) }}"
-               class="px-3 py-1.5 rounded-full border transition-colors {{ $status === 'diagnosed' ? 'bg-green-600 text-white border-green-600' : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-green-600' }}">
-                Diagnosed <span class="ml-1 opacity-75">({{ $counts['diagnosed'] }})</span>
-            </a>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-            @if($cases->isEmpty())
-                <div class="p-12 text-center text-slate-500">No cases match this filter.</div>
-            @else
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-xs">
-                            <tr>
-                                <th class="px-6 py-3 text-left font-semibold">Submitted</th>
-                                <th class="px-6 py-3 text-left font-semibold">Patient</th>
-                                <th class="px-6 py-3 text-left font-semibold">Doctor</th>
-                                <th class="px-6 py-3 text-left font-semibold">Status</th>
-                                <th class="px-6 py-3 text-left font-semibold">Description</th>
-                                <th class="px-6 py-3 text-right font-semibold">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                            @foreach($cases as $case)
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                    <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">{{ $case->created_at->format('M d, Y') }}</td>
-                                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap">
-                                        {{ $case->user?->name ?? '—' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                                        {{ $case->doctor?->name ?? '—' }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-[10px] font-bold rounded uppercase {{ $case->status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200' : 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200' }}">
-                                            {{ $case->status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400 max-w-xs">
-                                        <span class="line-clamp-1">{{ $case->description }}</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <a href="{{ route('admin.cases.show', $case) }}"
-                                           class="px-3 py-1.5 text-xs font-semibold rounded-md text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-800">
-                                            View
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+        <div class="search">
+            <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input class="input" placeholder="Search…" style="width:280px" oninput="filterCases(this.value)">
         </div>
     </div>
+
+    <div class="stat-grid">
+        <div class="stat"><div class="stat__label">Total cases</div><div class="stat__value">{{ $counts['all'] }}</div></div>
+        <div class="stat"><div class="stat__label">Active</div><div class="stat__value">{{ $cases->where('status','!=','closed')->count() }}</div></div>
+        <div class="stat"><div class="stat__label">Diagnosed</div><div class="stat__value">{{ $counts['diagnosed'] }}</div></div>
+        <div class="stat"><div class="stat__label">Closed</div><div class="stat__value">{{ $counts['closed'] }}</div></div>
+    </div>
+
+    <div class="tabs" id="case-tabs">
+        <button class="tab {{ !$status ? 'is-on' : '' }}" onclick="filterStatus(this,'all')">All<span class="tab__count">{{ $counts['all'] }}</span></button>
+        @foreach(['submitted','needs_info','in_review','diagnosed','closed'] as $s)
+        <button class="tab {{ $status === $s ? 'is-on' : '' }}" onclick="filterStatus(this,'{{ $s }}')">
+            {{ ['submitted'=>'Submitted','needs_info'=>'Needs info','in_review'=>'In review','diagnosed'=>'Diagnosed','closed'=>'Closed'][$s] }}
+            <span class="tab__count">{{ $counts[$s] }}</span>
+        </button>
+        @endforeach
+    </div>
+
+    <div class="table-wrap">
+        @if($cases->isEmpty())
+        <div class="empty" style="border:none;border-radius:0">
+            <p class="empty__sub">No cases found.</p>
+        </div>
+        @else
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Case</th>
+                    <th>Patient</th>
+                    <th>Guardian</th>
+                    <th>Complaint</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Diagnosis</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="cases-tbody">
+                @foreach($cases as $case)
+                <tr class="case-row" data-status="{{ $case->status }}" data-search="{{ strtolower($case->id . ' ' . $case->child_name . ' ' . $case->user->name . ' ' . $case->title) }}" style="cursor:pointer" onclick="window.location='{{ route('admin.cases.show', $case) }}'">
+                    <td>
+                        <div class="row" style="gap:10px">
+                            <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--brand-softer)">
+                                @if($case->images->first())
+                                <img src="{{ asset('storage/' . $case->images->first()->path) }}" style="width:100%;height:100%;object-fit:cover">
+                                @elseif($case->image_path)
+                                <img src="{{ asset('storage/' . $case->image_path) }}" style="width:100%;height:100%;object-fit:cover">
+                                @endif
+                            </div>
+                            <span class="mono text-xs">#{{ $case->id }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="fw-600">{{ $case->child_name ?? '—' }}</div>
+                        <div class="text-xs muted">{{ $case->child_age ? $case->child_age . ' ' . $case->child_age_unit : '' }}</div>
+                    </td>
+                    <td class="text-sm">{{ $case->user->name }}</td>
+                    <td style="max-width:260px">
+                        <div style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden">{{ $case->title ?? $case->description }}</div>
+                    </td>
+                    <td><span class="badge {{ $case->status_class }}">{{ $case->status_label }}</span></td>
+                    <td class="text-sm muted">{{ $case->created_at->format('M d, Y') }}</td>
+                    <td class="text-sm">
+                        @if($case->diagnosis_condition)
+                        <div>
+                            <div class="fw-600">{{ $case->diagnosis_condition }}</div>
+                            @if($case->icd_code)<div class="text-xs muted mono">{{ $case->icd_code }}</div>@endif
+                        </div>
+                        @elseif($case->diagnosis)
+                        <div class="fw-600">{{ $case->diagnosis }}</div>
+                        @else
+                        <span class="muted">—</span>
+                        @endif
+                    </td>
+                    <td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @endif
+    </div>
 </div>
+
+<script>
+let currentStatusFilter = '{{ $status ?? "all" }}';
+function filterStatus(btn, status) {
+    currentStatusFilter = status;
+    document.querySelectorAll('#case-tabs .tab').forEach(t => t.classList.remove('is-on'));
+    btn.classList.add('is-on');
+    applyFilters();
+}
+function filterCases(q) { applyFilters(q.toLowerCase()); }
+function applyFilters(q) {
+    q = q || document.querySelector('input[oninput]')?.value?.toLowerCase() || '';
+    document.querySelectorAll('.case-row').forEach(row => {
+        const statusOk = currentStatusFilter === 'all' || row.dataset.status === currentStatusFilter;
+        const searchOk = !q || row.dataset.search.includes(q);
+        row.style.display = (statusOk && searchOk) ? '' : 'none';
+    });
+}
+</script>
 @endsection

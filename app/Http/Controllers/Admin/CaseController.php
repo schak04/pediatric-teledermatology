@@ -10,11 +10,12 @@ class CaseController extends Controller
 {
     public function index(Request $request)
     {
-        $status = in_array($request->query('status'), ['pending', 'diagnosed'], true)
+        $validStatuses = ['submitted', 'needs_info', 'in_review', 'diagnosed', 'closed'];
+        $status = in_array($request->query('status'), $validStatuses, true)
             ? $request->query('status')
             : null;
 
-        $query = DermatologyCase::with(['user', 'doctor'])->latest();
+        $query = DermatologyCase::with(['user', 'doctor', 'images'])->latest();
 
         if ($status) {
             $query->where('status', $status);
@@ -22,18 +23,17 @@ class CaseController extends Controller
 
         $cases = $query->get();
 
-        $counts = [
-            'all' => DermatologyCase::count(),
-            'pending' => DermatologyCase::where('status', 'pending')->count(),
-            'diagnosed' => DermatologyCase::where('status', 'diagnosed')->count(),
-        ];
+        $counts = ['all' => DermatologyCase::count()];
+        foreach ($validStatuses as $s) {
+            $counts[$s] = DermatologyCase::where('status', $s)->count();
+        }
 
         return view('admin.cases.index', compact('cases', 'status', 'counts'));
     }
 
     public function show(DermatologyCase $case)
     {
-        $case->load(['user', 'doctor']);
+        $case->load(['user', 'doctor', 'images']);
 
         return view('admin.cases.show', compact('case'));
     }

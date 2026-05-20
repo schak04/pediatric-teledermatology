@@ -4,109 +4,90 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'TeleDermPeds') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script>
-        (function () {
-            try {
-                var t = localStorage.getItem('theme')
-                    || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                if (t === 'dark') document.documentElement.classList.add('dark');
-            } catch (e) {}
-        })();
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,300..600,30..100&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-    <div class="min-h-screen flex flex-col">
-        
-        <!-- nav -->
-        <nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16 items-center">
-                    <div class="flex items-center gap-2">
-                        <a href="{{ url('/') }}" class="flex items-center gap-2">
-                            <span class="text-xl font-bold tracking-tight">TeleDerm <span class="text-blue-600">Peds</span></span>
-                        </a>
-                    </div>
-                    
-                    <div class="flex items-center gap-2 md:gap-6">
-                        <div class="hidden md:flex items-center gap-4 text-sm font-medium">
-                            <a href="{{ url('/') }}" class="hover:text-blue-600 transition-colors">Home</a>
-                            @auth
-                                <a href="{{ url('/dashboard') }}" class="hover:text-blue-600 transition-colors">Dashboard</a>
-                                @if(auth()->user()->role === 'admin')
-                                    <a href="{{ route('admin.users.index') }}" class="hover:text-blue-600 transition-colors">Users</a>
-                                    <a href="{{ route('admin.cases.index') }}" class="hover:text-blue-600 transition-colors">Cases</a>
-                                @endif
-                                <form method="POST" action="{{ route('logout') }}" class="inline">
-                                    @csrf
-                                    <button type="submit" class="hover:text-blue-600 transition-colors">Logout</button>
-                                </form>
-                            @else
-                                <a href="{{ route('login') }}" class="hover:text-blue-600 transition-colors">Login</a>
-                                <a href="{{ route('register') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Get Started</a>
-                            @endauth
-                        </div>
+<body>
+<div class="app">
 
-                        <button
-                            onclick="toggleTheme()"
-                            class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                            aria-label="Toggle Theme"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-                        </button>
-
-                        <button
-                            type="button"
-                            onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
-                            class="md:hidden p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                            aria-label="Toggle Menu"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                        </button>
+    <header class="app-header">
+        <div class="app-header__inner">
+            <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" style="text-decoration:none">
+                <div class="brand">
+                    <div class="brand__mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 21s-7-4.5-7-11a5 5 0 0 1 7-4.5A5 5 0 0 1 19 10c0 6.5-7 11-7 11z" fill="currentColor" stroke="none" opacity="0.25"/>
+                            <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"/>
+                        </svg>
                     </div>
+                    <span>teledermpeds</span>
                 </div>
+            </a>
 
-                <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-slate-200 dark:border-slate-800 pt-3">
-                    <div class="flex flex-col gap-2 text-sm font-medium">
-                        <a href="{{ url('/') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
-                            @if(auth()->user()->role === 'admin')
-                                <a href="{{ route('admin.users.index') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Users</a>
-                                <a href="{{ route('admin.cases.index') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cases</a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Logout</button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Login</a>
-                            <a href="{{ route('register') }}" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors">Get Started</a>
-                        @endauth
-                    </div>
+            @auth
+            <nav class="nav">
+                @if(auth()->user()->role === 'patient')
+                    <a href="{{ route('cases.index') }}" class="nav__item {{ request()->routeIs('cases.index') ? 'is-active' : '' }}">My cases</a>
+                    <a href="{{ route('cases.create') }}" class="nav__item {{ request()->routeIs('cases.create') ? 'is-active' : '' }}">New consultation</a>
+                @elseif(auth()->user()->role === 'doctor')
+                    <a href="{{ route('cases.index') }}" class="nav__item {{ request()->routeIs('cases.index') ? 'is-active' : '' }}">Case queue</a>
+                @elseif(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.users.index') }}" class="nav__item {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}">Users</a>
+                    <a href="{{ route('admin.cases.index') }}" class="nav__item {{ request()->routeIs('admin.cases.*') ? 'is-active' : '' }}">All cases</a>
+                @endif
+            </nav>
+            @endauth
+
+            <div class="header__spacer"></div>
+
+            <div class="header__right">
+                @auth
+                <div class="role-chip">
+                    <span>{{ auth()->user()->name }}</span>
+                    <span class="role-chip__role">{{ strtoupper(auth()->user()->role) }}</span>
                 </div>
+                <div class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name, ' '), 1, 1)) }}</div>
+                <form method="POST" action="{{ route('logout') }}" style="margin:0">
+                    @csrf
+                    <button type="submit" class="btn btn--ghost btn--sm">Sign out</button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="btn btn--ghost btn--sm">Sign in</a>
+                <a href="{{ route('register') }}" class="btn btn--primary btn--sm">Get started</a>
+                @endauth
             </div>
-        </nav>
+        </div>
+    </header>
 
-        <!-- main content -->
-        <main class="flex-grow max-w-7xl mx-auto w-full py-6 px-4 sm:px-6 lg:px-8">
-            @include('partials.flash')
-            @yield('content')
-        </main>
+    <main style="flex:1">
+        @if(session('success'))
+        <div style="padding: 0 28px; padding-top: 16px; max-width: 1280px; margin: 0 auto;">
+            <div class="flash flash--success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+                {{ session('success') }}
+            </div>
+        </div>
+        @endif
+        @if(session('error') || $errors->any())
+        <div style="padding: 0 28px; padding-top: 16px; max-width: 1280px; margin: 0 auto;">
+            <div class="flash flash--error">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+                {{ session('error') ?? $errors->first() }}
+            </div>
+        </div>
+        @endif
 
-        <!-- footer -->
-        <footer class="mt-auto py-8 border-t border-slate-200 dark:border-slate-800 text-center text-sm text-slate-500">
-            &copy; {{ date('Y') }} TeleDermPeds. All rights reserved.
-        </footer>
-    </div>
+        @yield('content')
+    </main>
+
+    <footer style="padding: 24px 28px; border-top: 1px solid var(--divider); text-align: center; font-size: 13px; color: var(--ink-4);">
+        &copy; {{ date('Y') }} teledermpeds &mdash; Pediatric dermatology, delivered.
+    </footer>
+</div>
 </body>
 </html>

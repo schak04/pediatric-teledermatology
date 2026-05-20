@@ -1,18 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Auth\AuthController;
-
 use App\Http\Controllers\CaseController;
-
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-
 use App\Http\Controllers\Admin\CaseController as AdminCaseController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    if (auth()->check()) {
+        return redirect()->route('cases.index');
+    }
+    return view('landing');
+})->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -22,15 +21,28 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return redirect()->route('cases.index');
     })->name('dashboard');
 
+    // Cases
     Route::get('/cases', [CaseController::class, 'index'])->name('cases.index');
     Route::get('/cases/create', [CaseController::class, 'create'])->name('cases.create');
     Route::post('/cases', [CaseController::class, 'store'])->name('cases.store');
     Route::get('/cases/{case}', [CaseController::class, 'show'])->name('cases.show');
-    Route::post('/cases/{case}/diagnose', [CaseController::class, 'updateDiagnosis'])->name('cases.diagnose');
 
+    // Doctor routes
+    Route::middleware('role:doctor')->group(function () {
+        Route::get('/cases/{case}/review', [CaseController::class, 'review'])->name('cases.review');
+        Route::post('/cases/{case}/diagnose', [CaseController::class, 'diagnose'])->name('cases.diagnose');
+        Route::post('/cases/{case}/request-info', [CaseController::class, 'requestInfo'])->name('cases.request-info');
+    });
+
+    // Patient reply
+    Route::middleware('role:patient')->group(function () {
+        Route::post('/cases/{case}/reply', [CaseController::class, 'replyInfo'])->name('cases.reply');
+    });
+
+    // Admin
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
