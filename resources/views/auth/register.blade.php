@@ -1,59 +1,111 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create account — TeleDermPeds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,300..600,30..100&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+<div class="auth">
 
-@section('content')
-<div class="max-w-md mx-auto py-12 px-4">
-    <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white text-center mb-8">Create an Account</h1>
-        
-        <form method="POST" action="{{ route('register.post') }}" class="space-y-6">
+    <div class="auth__side">
+        <div class="auth__brand">
+            <div class="brand__mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21s-7-4.5-7-11a5 5 0 0 1 7-4.5A5 5 0 0 1 19 10c0 6.5-7 11-7 11z" fill="currentColor" stroke="none" opacity="0.25"/>
+                    <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"/>
+                </svg>
+            </div>
+            <span>TeleDermPeds</span>
+        </div>
+        <div class="auth__hero">
+            <div class="auth__hero-eyebrow">Pediatric dermatology, online</div>
+            <h1 class="auth__hero-title">Get started in<br><em>under 2 minutes.</em></h1>
+            <p class="auth__hero-sub">Create your account, upload your child's case photos, and hear back from a pediatric dermatologist — usually within 24 hours.</p>
+        </div>
+        <div class="auth__features">
+            <div class="auth__feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/></svg>
+                <span>Your data is encrypted and never shared without your consent.</span>
+            </div>
+            <div class="auth__feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a4 4 0 0 0 8 0V3M5 3h2M11 3h2M9 13v3a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="14" r="2"/></svg>
+                <span>Board-certified pediatric dermatologists review every case.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth__form">
+        <h2 class="auth__form-title">Create your account</h2>
+        <p class="auth__form-sub">Tell us how you'll be using TeleDermPeds.</p>
+
+        <form method="POST" action="{{ route('register.post') }}" style="display:flex;flex-direction:column;gap:16px">
             @csrf
-            
-            <div>
-                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Enter your full name" required
-                    class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-                @error('name') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+
+            <div class="field">
+                <label class="label">I am a&hellip;</label>
+                <div class="auth__role-grid">
+                    <div class="auth__role {{ old('role', 'patient') === 'patient' ? 'is-on' : '' }}" data-role="patient" onclick="selectRole(this)">
+                        <div class="auth__role-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.5"/><path d="M2.5 20c0-3.3 3-6 6.5-6s6.5 2.7 6.5 6"/><circle cx="17" cy="9" r="2.8"/><path d="M14 14.5c.9-.3 1.9-.5 3-.5 3 0 5.5 2.3 5.5 5"/></svg>
+                        </div>
+                        <div class="auth__role-name">Parent / Guardian</div>
+                        <div class="auth__role-desc">I have a child who needs to be seen</div>
+                    </div>
+                    <div class="auth__role {{ old('role') === 'doctor' ? 'is-on' : '' }}" data-role="doctor" onclick="selectRole(this)">
+                        <div class="auth__role-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a4 4 0 0 0 8 0V3M5 3h2M11 3h2M9 13v3a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="14" r="2"/></svg>
+                        </div>
+                        <div class="auth__role-name">Doctor</div>
+                        <div class="auth__role-desc">I review and diagnose cases</div>
+                    </div>
+                </div>
+                <input type="hidden" name="role" id="role-input" value="{{ old('role', 'patient') }}">
+                @error('role')<span class="hint" style="color:var(--status-danger)">{{ $message }}</span>@enderror
             </div>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
-                <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter your email address" required
-                    class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-                @error('email') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+            <div class="field">
+                <label class="label" for="name">Full name</label>
+                <input class="input" type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Your name" required>
+                @error('name')<span class="hint" style="color:var(--status-danger)">{{ $message }}</span>@enderror
             </div>
 
-            <div>
-                <label for="role" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Account Type</label>
-                <select name="role" id="role" required
-                    class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-                    <option value="">Select your role</option>
-                    <option value="patient">Patient / Parent</option>
-                    <option value="doctor">Doctor</option>
-                </select>
-                @error('role') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <input class="input" type="email" name="email" id="email" value="{{ old('email') }}" placeholder="you@example.com" required>
+                @error('email')<span class="hint" style="color:var(--status-danger)">{{ $message }}</span>@enderror
             </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter your password" required
-                    class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-                @error('password') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+            <div class="field-row">
+                <div class="field">
+                    <label class="label" for="password">Password</label>
+                    <input class="input" type="password" name="password" id="password" placeholder="Min. 8 characters" required>
+                    @error('password')<span class="hint" style="color:var(--status-danger)">{{ $message }}</span>@enderror
+                </div>
+                <div class="field">
+                    <label class="label" for="password_confirmation">Confirm password</label>
+                    <input class="input" type="password" name="password_confirmation" id="password_confirmation" placeholder="Repeat password" required>
+                </div>
             </div>
 
-            <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirm Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm your password" required
-                    class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-            </div>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Create account</button>
 
-            <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 outline-none">
-                Create Account
-            </button>
+            <div class="auth__divider">Already have an account?</div>
+            <a href="{{ route('login') }}" class="btn btn--ghost btn--block">Sign in instead</a>
         </form>
-
-        <p class="mt-8 text-center text-sm text-slate-600 dark:text-slate-400">
-            Already have an account? <a href="{{ route('login') }}" class="text-blue-600 font-medium hover:underline">Log in</a>
-        </p>
     </div>
 </div>
-@endsection
+
+<script>
+function selectRole(el) {
+    document.querySelectorAll('.auth__role').forEach(r => r.classList.remove('is-on'));
+    el.classList.add('is-on');
+    document.getElementById('role-input').value = el.dataset.role;
+}
+</script>
+</body>
+</html>

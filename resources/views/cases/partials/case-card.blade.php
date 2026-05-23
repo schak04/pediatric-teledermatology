@@ -1,25 +1,49 @@
-<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-all hover:shadow-md">
-    <div class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
-        <img src="{{ asset('storage/' . $case->image_path) }}" alt="Case Image" class="w-full h-full object-cover">
-        <div class="absolute top-2 right-2">
-            <span class="px-2 py-1 text-[10px] font-bold rounded shadow-sm {{ $case->status === 'pending' ? 'bg-amber-500 text-white' : 'bg-green-600 text-white' }} uppercase">
-                {{ $case->status }}
-            </span>
+@php
+    $href = auth()->user()->role === 'doctor'
+        ? route('cases.review', $case)
+        : route('cases.show', $case);
+
+    $showPatient = $showPatient ?? true;
+    $firstImage = $case->images->first() ?? null;
+@endphp
+
+<a href="{{ $href }}" class="case-card" style="text-decoration:none;color:inherit">
+    <div class="case-card__photo">
+        @if($firstImage)
+            <img src="{{ asset('storage/' . $firstImage->path) }}" alt="Case photo">
+        @elseif($case->image_path)
+            <img src="{{ asset('storage/' . $case->image_path) }}" alt="Case photo">
+        @else
+            <div class="case-card__photo-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h2l2-2h6l2 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+        @endif
+        <div class="case-card__status">
+            <span class="badge {{ $case->status_class }}">{{ $case->status_label }}</span>
         </div>
+        @php $photoCount = $case->images->count() ?: ($case->image_path ? 1 : 0); @endphp
+        @if($photoCount)
+        <div class="case-card__count">{{ $photoCount }} photo{{ $photoCount > 1 ? 's' : '' }}</div>
+        @endif
     </div>
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-3">
-            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ $case->created_at->format('M d, Y') }}</span>
-            @if(auth()->user()->role === 'doctor')
-                <span class="text-[10px] font-medium text-slate-400">Patient: {{ $case->user->name }}</span>
+    <div class="case-card__body">
+        <div class="case-card__patient">
+            @if($showPatient)
+                <span class="case-card__name">{{ $case->child_name ?? $case->user->name }}</span>
+                <span class="case-card__meta">{{ $case->child_age ? $case->child_age . ' ' . $case->child_age_unit : '' }}</span>
+            @else
+                <span class="case-card__name">#{{ $case->id }}</span>
+                <span class="case-card__meta">{{ $case->created_at->diffForHumans() }}</span>
             @endif
         </div>
-        <p class="text-slate-700 dark:text-slate-300 text-sm line-clamp-2 mb-6 h-10">
-            {{ $case->description }}
-        </p>
-        <a href="{{ route('cases.show', $case) }}" class="inline-flex items-center text-blue-600 dark:text-blue-400 text-sm font-bold hover:gap-2 transition-all">
-            View Details 
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
+        <p class="case-card__title">{{ $case->title ?? $case->description }}</p>
+        <div class="case-card__foot">
+            <span class="muted">{{ $case->body_location ?? '' }}</span>
+            @if($case->diagnosis_condition)
+                <span class="fw-600" style="color:var(--brand-ink);font-size:12px">{{ $case->diagnosis_condition }}</span>
+            @elseif($case->status === 'needs_info')
+                <span class="fw-600" style="color:var(--status-danger);font-size:12px">Reply needed</span>
+            @endif
+        </div>
     </div>
-</div>
+</a>

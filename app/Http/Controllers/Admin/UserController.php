@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query()->latest();
+        $query = User::withCount('cases')->latest();
 
         if (in_array($request->query('role'), ['admin', 'doctor', 'patient'], true)) {
             $query->where('role', $request->query('role'));
