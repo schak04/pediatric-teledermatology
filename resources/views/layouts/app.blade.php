@@ -25,7 +25,7 @@
                             <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"/>
                         </svg>
                     </div>
-                    <span>teledermpeds</span>
+                    <span>TeleDermPeds</span>
                 </div>
             </a>
 
@@ -86,7 +86,7 @@
     </main>
 
     <footer style="padding: 24px 28px; border-top: 1px solid var(--divider); text-align: center; font-size: 13px; color: var(--ink-4);">
-        &copy; {{ date('Y') }} teledermpeds &mdash; Pediatric dermatology, delivered.
+        &copy; {{ date('Y') }} TeleDermPeds &mdash; Pediatric dermatology, delivered.
     </footer>
 </div>
 </body>

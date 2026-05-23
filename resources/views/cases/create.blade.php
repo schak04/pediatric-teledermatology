@@ -216,7 +216,7 @@
                         <div class="fw-600 text-sm">I understand and consent</div>
                         <div class="text-sm muted">
                             This is a non-emergency consultation. If symptoms are severe or worsening rapidly, I will seek in-person care.
-                            I authorize teledermpeds to share these photos and details with a licensed pediatric dermatologist for diagnosis and treatment.
+                            I authorize TeleDermPeds to share these photos and details with a licensed pediatric dermatologist for diagnosis and treatment.
                         </div>
                     </div>
                 </label>

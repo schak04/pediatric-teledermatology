@@ -20,7 +20,7 @@
                     <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"/>
                 </svg>
             </div>
-            <span>teledermpeds</span>
+            <span>TeleDermPeds</span>
         </div>
         <div class="auth__hero">
             <div class="auth__hero-eyebrow">Pediatric dermatology, online</div>
@@ -41,7 +41,7 @@
 
     <div class="auth__form">
         <h2 class="auth__form-title">Create your account</h2>
-        <p class="auth__form-sub">Tell us how you'll be using teledermpeds.</p>
+        <p class="auth__form-sub">Tell us how you'll be using TeleDermPeds.</p>
 
         <form method="POST" action="{{ route('register.post') }}" style="display:flex;flex-direction:column;gap:16px">
             @csrf

@@ -21,7 +21,7 @@
                     <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"/>
                 </svg>
             </div>
-            <span>teledermpeds</span>
+            <span>TeleDermPeds</span>
         </div>
 
         <div class="auth__hero">

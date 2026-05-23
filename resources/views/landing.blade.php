@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>teledermpeds — pediatric dermatology, online</title>
+<title>TeleDermPeds</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,300..600,30..100&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -21,7 +21,7 @@
           <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"></path>
         </svg>
       </div>
-      <span>teledermpeds</span>
+      <span>TeleDermPeds</span>
     </div>
     <div class="lp-nav__links">
       <a href="#how">How it works</a>
@@ -716,7 +716,7 @@
             <path d="M8 11.5h2.5l1.5-3 1.5 5 1-2H16"></path>
           </svg>
         </div>
-        <span>teledermpeds</span>
+        <span>TeleDermPeds</span>
       </div>
       <p class="lp-footer__tag">Expert pediatric dermatology, delivered online by board-certified specialists across all 50 states.</p>
     </div>
