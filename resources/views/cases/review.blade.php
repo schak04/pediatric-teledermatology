@@ -182,18 +182,19 @@
                     <!-- ICD-10 picker -->
                     <div class="field" style="position:relative">
                         <label class="label">ICD-10 code</label>
+                        @php $currentIcd = old('icd_code', $case->icd_code ?? ''); @endphp
                         <button type="button" class="input row" style="text-align:left;cursor:pointer;justify-content:space-between" onclick="toggleIcdPicker()">
                             <span id="icd-display">
-                                @if($case->icd_code)
-                                <span class="mono fw-600">{{ $case->icd_code }}</span>
-                                <span class="muted"> — {{ collect($icdCodes)->firstWhere('code', $case->icd_code)['label'] ?? '' }}</span>
+                                @if($currentIcd)
+                                <span class="mono fw-600">{{ $currentIcd }}</span>
+                                <span class="muted"> — {{ collect($icdCodes)->firstWhere('code', $currentIcd)['label'] ?? '' }}</span>
                                 @else
                                 <span class="muted">Search by code or condition…</span>
                                 @endif
                             </span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
-                        <input type="hidden" name="icd_code" id="icd-val" value="{{ old('icd_code', $case->icd_code ?? '') }}">
+                        <input type="hidden" name="icd_code" id="icd-val" value="{{ $currentIcd }}">
 
                         <div class="icd-picker" id="icd-picker" style="display:none">
                             <div style="padding:8px;border-bottom:1px solid var(--divider)">
@@ -219,13 +220,14 @@
 
                     <div class="field">
                         <label class="label">Severity</label>
+                        @php $currentSev = (int) old('severity_doctor', $case->severity_doctor ?? 0); @endphp
                         <div class="severity" id="diag-severity">
                             @for($i = 1; $i <= 5; $i++)
-                            <button type="button" class="severity__dot {{ ($case->severity_doctor ?? 0) >= $i ? 'active-' . ($case->severity_doctor ?? 0) : '' }}" id="dsev-{{ $i }}" onclick="setDiagSev({{ $i }})"></button>
+                            <button type="button" class="severity__dot {{ $currentSev >= $i ? 'active-' . $currentSev : '' }}" id="dsev-{{ $i }}" onclick="setDiagSev({{ $i }})"></button>
                             @endfor
-                            <span class="severity__label" id="dsev-label">{{ ['','Mild','Mild-Mod','Moderate','Mod-Severe','Severe'][$case->severity_doctor ?? 0] }}</span>
+                            <span class="severity__label" id="dsev-label">{{ ['','Mild','Mild-Mod','Moderate','Mod-Severe','Severe'][$currentSev] ?? '' }}</span>
                         </div>
-                        <input type="hidden" name="severity_doctor" id="dsev-val" value="{{ old('severity_doctor', $case->severity_doctor ?? '') }}">
+                        <input type="hidden" name="severity_doctor" id="dsev-val" value="{{ $currentSev ?: '' }}">
                     </div>
 
                     <div class="field">
@@ -236,7 +238,7 @@
                     <div class="field">
                         <label class="label">Treatment plan</label>
                         <div style="display:flex;flex-direction:column;gap:8px" id="treatment-steps">
-                            @php $steps = $case->treatment_steps ?? (old('treatment_steps') ?? ['']); @endphp
+                            @php $steps = old('treatment_steps', $case->treatment_steps ?: ['']); @endphp
                             @foreach($steps as $i => $step)
                             <div class="row treatment-step-row" style="gap:6px">
                                 <div class="treatment-step__num">{{ $i + 1 }}</div>

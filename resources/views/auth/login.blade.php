@@ -83,31 +83,6 @@
 
             <button class="btn btn--primary btn--lg btn--block" type="submit">Sign in</button>
 
-            <!-- Demo accounts -->
-            <div class="card card--soft" style="padding:12px 14px;margin-top:4px">
-                <div class="text-xs muted" style="margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Demo — quick sign in as:</div>
-                <div class="row" style="gap:8px;flex-wrap:wrap">
-                    <form method="POST" action="{{ route('login.post') }}" style="margin:0">
-                        @csrf
-                        <input type="hidden" name="email" value="patient@telederm.com">
-                        <input type="hidden" name="password" value="PatientPass123!">
-                        <button type="submit" class="btn btn--subtle btn--sm">Parent</button>
-                    </form>
-                    <form method="POST" action="{{ route('login.post') }}" style="margin:0">
-                        @csrf
-                        <input type="hidden" name="email" value="doctor@telederm.com">
-                        <input type="hidden" name="password" value="DoctorPass123!">
-                        <button type="submit" class="btn btn--subtle btn--sm">Doctor</button>
-                    </form>
-                    <form method="POST" action="{{ route('login.post') }}" style="margin:0">
-                        @csrf
-                        <input type="hidden" name="email" value="admin@telederm.com">
-                        <input type="hidden" name="password" value="AdminPass123!">
-                        <button type="submit" class="btn btn--subtle btn--sm">Admin</button>
-                    </form>
-                </div>
-            </div>
-
             <div class="auth__divider">New to teledermpeds?</div>
 
             <a href="{{ route('register') }}" class="btn btn--ghost btn--block">Create an account</a>
