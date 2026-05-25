@@ -290,7 +290,7 @@ a { color: var(--brand-ink); text-decoration: none; }
 .step.is-done::after { background: var(--brand); }
 
 /* ===== Doctor 3-pane review ===== */
-.review-shell { display: grid; grid-template-columns: 300px minmax(0, 1fr) 380px; gap: 0; min-height: calc(100vh - 64px); background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+.review-shell { display: grid; grid-template-columns: 300px minmax(0, 1fr) 380px; gap: 0; height: calc(100vh - 130px); background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
 .review-list { border-right: 1px solid var(--divider); background: var(--bg-elev); display: flex; flex-direction: column; overflow: hidden; }
 .review-list__head { padding: 16px 18px; border-bottom: 1px solid var(--divider); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .review-list__title { font-weight: 600; font-size: 14px; }

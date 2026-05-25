@@ -13,6 +13,10 @@ class CaseController extends Controller
     {
         $user = auth()->user();
 
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.cases.index');
+        }
+
         if ($user->role === 'patient') {
             $cases = DermatologyCase::with('images')
                 ->where('user_id', $user->id)

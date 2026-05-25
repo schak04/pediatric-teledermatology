@@ -36,7 +36,7 @@
 </div>
 
 <div style="padding:0 20px 40px">
-    <div class="review-shell" style="max-height:calc(100vh - 130px)">
+    <div class="review-shell">
 
         <!-- LEFT — case list -->
         <div class="review-list">
