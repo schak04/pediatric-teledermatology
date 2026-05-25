@@ -73,6 +73,7 @@ class CaseController extends Controller
             'sex'              => $request->sex,
             'title'            => $request->title,
             'description'      => $request->additional_notes ?? '',
+            'image_path'       => '',
             'body_location'    => $request->body_location,
             'duration'         => $request->duration,
             'symptoms'         => $request->symptoms ?? [],
@@ -86,9 +87,16 @@ class CaseController extends Controller
         ]);
 
         if ($request->hasFile('images')) {
+            $firstPath = null;
             foreach ($request->file('images') as $idx => $file) {
                 $path = $file->store('cases', 'public');
                 CaseImage::create(['case_id' => $case->id, 'path' => $path, 'order' => $idx]);
+                if ($idx === 0) {
+                    $firstPath = $path;
+                }
+            }
+            if ($firstPath) {
+                $case->update(['image_path' => $firstPath]);
             }
         }
 
@@ -140,7 +148,7 @@ class CaseController extends Controller
             'severity_doctor'     => 'nullable|integer|min:1|max:5',
             'diagnosis_summary'   => 'required|string|min:10',
             'treatment_steps'     => 'nullable|array',
-            'treatment_steps.*'   => 'string|max:500',
+            'treatment_steps.*'   => 'nullable|string|max:500',
             'follow_up'           => 'nullable|string|max:100',
             'close_case'          => 'nullable|boolean',
         ]);
